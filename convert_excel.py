@@ -57,6 +57,9 @@ def read_all_sheets(file_path):
         "products": []
     }
 
+    # 全局递增ID
+    product_id = 0
+
     category_map = {
         '哈根达斯': '月饼',
         '元祖': '月饼',
@@ -106,8 +109,9 @@ def read_all_sheets(file_path):
             if not name:
                 continue
 
+            product_id += 1
             product = {
-                "id": i,
+                "id": product_id,
                 "category": category_map.get(sheet_name, sheet_name),
                 "brand": sheet_name,
                 "name": name,
