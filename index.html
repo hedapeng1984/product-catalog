@@ -411,6 +411,17 @@
             padding: 0.5rem;
         }
 
+        .product-image {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+
         .detail-row {
             margin-bottom: 0.2rem;
         }
@@ -796,6 +807,7 @@
                 <div class="name" id="modalName"></div>
             </div>
             <div class="modal-body">
+                <div class="product-image" id="modalImage"></div>
                 <div class="detail-row">
                     <div class="label">简要说明</div>
                     <div class="value" id="modalDescription"></div>
@@ -1050,6 +1062,14 @@
             document.getElementById('modalDescription').textContent = product.description || '—';
             document.getElementById('modalSize').textContent = product.size || '—';
             document.getElementById('modalShelf').textContent = product.shelfLife || '—';
+
+            // 显示产品图片
+            const modalImage = document.getElementById('modalImage');
+            if (product.image) {
+                modalImage.innerHTML = `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.style.display='none'">`;
+            } else {
+                modalImage.innerHTML = '';
+            }
             document.getElementById('modalRemark').textContent = product.remark || '—';
             document.getElementById('modalRetail').textContent = product.retailPrice ? `¥${product.retailPrice}` : '—';
             document.getElementById('modalBulk').textContent = product.bulkPrice ? `¥${product.bulkPrice}` : '—';
