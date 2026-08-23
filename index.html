@@ -1047,6 +1047,12 @@
             document.getElementById('modalRetail').textContent = product.retailPrice ? `¥${product.retailPrice}` : '—';
             document.getElementById('modalBulk').textContent = product.bulkPrice ? `¥${product.bulkPrice}` : '—';
 
+            // 更新联系电话
+            const sales = salesData[currentSales];
+            const contactBtn = document.getElementById('contactBtn');
+            contactBtn.textContent = `📞 立即联系：${sales.name} ${sales.phone}`;
+            contactBtn.href = `tel:${sales.phone}`;
+
             modalOverlay.classList.add('active');
         }
 
