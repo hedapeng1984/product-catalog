@@ -883,9 +883,17 @@
         // 更新联系方式
         function updateContactInfo() {
             const sales = salesData[currentSales];
+            console.log('currentSales:', currentSales, 'phone:', sales.phone);
             footerContact.innerHTML = `📞 联系人：${sales.name} | <a href="tel:${sales.phone}">${sales.phone}</a>`;
-            document.getElementById('contactBtn').textContent = `📞 立即联系：${sales.name} ${sales.phone}`;
-            document.getElementById('contactBtn').href = `tel:${sales.phone}`;
+            updateContactBtn();
+        }
+
+        function updateContactBtn() {
+            const sales = salesData[currentSales];
+            const contactBtn = document.getElementById('contactBtn');
+            contactBtn.textContent = `📞 立即联系 ${sales.phone}`;
+            contactBtn.href = `tel:${sales.phone}`;
+            console.log('设置电话:', sales.phone, 'href:', contactBtn.href);
         }
 
         // 渲染首页
@@ -1048,10 +1056,7 @@
             document.getElementById('modalBulk').textContent = product.bulkPrice ? `¥${product.bulkPrice}` : '—';
 
             // 更新联系电话
-            const sales = salesData[currentSales];
-            const contactBtn = document.getElementById('contactBtn');
-            contactBtn.textContent = `📞 立即联系：${sales.name} ${sales.phone}`;
-            contactBtn.href = `tel:${sales.phone}`;
+            updateContactBtn();
 
             modalOverlay.classList.add('active');
         }
