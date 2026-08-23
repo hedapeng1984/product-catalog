@@ -634,22 +634,24 @@
                 position: sticky;
                 top: 0;
                 background: var(--bg-primary);
-                padding: 0.05rem 0.8rem;
+                padding: 0.1rem 0.8rem;
                 margin: 0;
                 z-index: 50;
                 border-bottom: 1px solid var(--border-color);
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
                 gap: 0.3rem;
-                min-height: auto;
-                line-height: 1.2;
+                min-height: 32px;
+                line-height: 1;
             }
 
             .back-btn {
-                padding: 0.15rem 0.5rem;
+                padding: 0.2rem 0.5rem;
                 font-size: 0.8rem;
                 white-space: nowrap;
-                line-height: 1.2;
+                line-height: 1;
+                height: fit-content;
             }
 
             .view-title {
@@ -657,7 +659,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                line-height: 1.2;
+                line-height: 1;
             }
 
             .brand-filter {
