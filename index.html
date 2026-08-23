@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苏州趣享贸易 - 产品宣传册</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --accent: #e94560;
+            --accent-hover: #ff6b6b;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --text-muted: #6c757d;
+            --border-color: #2d3a4f;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部 */
+        header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        header .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            left: 280px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 64px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            z-index: 101;
+            transition: left 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar.hidden + .sidebar-toggle {
+            left: 0;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--accent-hover);
+        }
+
+        .sidebar h3 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .category-item:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        .category-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .category-item .name {
+            font-weight: 500;
+        }
+
+        .category-item .count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+        }
+
+        .category-item.active .count {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* 内容区 */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .content.expanded {
+            margin-left: 0;
+        }
+
+        /* 首页目录视图 */
+        .home-view {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .home-view h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        .category-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card .name {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .category-card .brand-count {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* 产品列表视图 */
+        .product-list-view {
+            display: none;
+        }
+
+        .product-list-view.active {
+            display: block;
+        }
+
+        .view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn {
+            background: var(--bg-card);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--accent);
+        }
+
+        .view-title {
+            font-size: 1.2rem;
+        }
+
+        .brand-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-tag {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .brand-tag:hover, .brand-tag.active {
+            background: var(--accent);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .product-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+            box-shadow: var(--shadow);
+        }
+
+        .product-card .name {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .product-card .brand {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+
+        .product-card .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .product-card .retail-price {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-decoration: line-through;
+        }
+
+        .product-card .bulk-price {
+            color: var(--accent);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* 产品详情弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-card);
+            border: none;
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header .brand {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header .name {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .detail-row {
+            margin-bottom: 1rem;
+        }
+
+        .detail-row .label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-row .value {
+            font-size: 1rem;
+            white-space: pre-line;
+        }
+
+        .price-section {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .price-section .retail {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            font-size: 0.9rem;
+        }
+
+        .price-section .bulk {
+            color: var(--accent);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 0.3rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .contact-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* 底部联系方式 */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        footer .company {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        footer .contact-info {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        footer .contact-info a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                height: 100%;
+                z-index: 200;
+            }
+
+            .sidebar.hidden {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-toggle {
+                left: 0;
+            }
+
+            .sidebar.hidden + .sidebar-toggle {
+                left: 0;
+            }
+
+            .sidebar-toggle.show {
+                left: 0;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏠 苏州趣享贸易有限公司</h1>
+        <div class="subtitle">产品宣传册</div>
+    </header>
+
+    <div class="main-container">
+        <nav class="sidebar" id="sidebar">
+            <h3>📂 产品目录</h3>
+            <ul class="category-list" id="categoryList">
+                <!-- 分类列表将通过JS动态生成 -->
+            </ul>
+        </nav>
+        <button class="sidebar-toggle" id="sidebarToggle" title="切换目录">◀</button>
+
+        <main class="content" id="content">
+            <!-- 首页视图 -->
+            <div class="home-view" id="homeView">
+                <h2>请选择产品分类</h2>
+                <div class="category-grid" id="categoryGrid">
+                    <!-- 分类卡片将通过JS动态生成 -->
+                </div>
+            </div>
+
+            <!-- 产品列表视图 -->
+            <div class="product-list-view" id="productListView">
+                <div class="view-header">
+                    <button class="back-btn" id="backBtn">← 返回目录</button>
+                    <h3 class="view-title" id="viewTitle"></h3>
+                </div>
+                <div class="brand-filter" id="brandFilter"></div>
+                <div class="product-grid" id="productGrid">
+                    <!-- 产品卡片将通过JS动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="company">苏州趣享贸易有限公司</div>
+        <div class="address">地址：苏州吴中区宝带西路111号城龙大厦8楼</div>
+        <div class="contact-info" id="footerContact">
+            <!-- 联系方式将通过JS动态生成 -->
+        </div>
+    </footer>
+
+    <!-- 产品详情弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="productModal">
+            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-header">
+                <div class="brand" id="modalBrand"></div>
+                <div class="name" id="modalName"></div>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <div class="label">简要说明</div>
+                    <div class="value" id="modalDescription"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">规格</div>
+                    <div class="value" id="modalSize"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">保质期</div>
+                    <div class="value" id="modalShelf"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">备注</div>
+                    <div class="value" id="modalRemark"></div>
+                </div>
+                <div class="price-section">
+                    <div class="retail">零售价：<span id="modalRetail"></span></div>
+                    <div class="bulk">集采价：<span id="modalBulk"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="contact-btn" id="contactBtn" href="tel:"></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 销售人员数据
+        const salesData = {
+            'chen': { name: '陈书翁', phone: '18625216213' },
+            'he': { name: '何达鹏', phone: '18601691529' },
+            'zhang': { name: '张瑜', phone: '18550897702' }
+        };
+
+        // 当前销售
+        let currentSales = 'chen';
+
+        // 全局数据
+        let catalogData = null;
+        let currentCategory = null;
+        let currentBrand = null;
+
+        // DOM元素
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const homeView = document.getElementById('homeView');
+        const productListView = document.getElementById('productListView');
+        const categoryGrid = document.getElementById('categoryGrid');
+        const categoryList = document.getElementById('categoryList');
+        const productGrid = document.getElementById('productGrid');
+        const brandFilter = document.getElementById('brandFilter');
+        const viewTitle = document.getElementById('viewTitle');
+        const footerContact = document.getElementById('footerContact');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // 初始化
+        async function init() {
+            // 获取URL参数确定销售
+            const params = new URLSearchParams(window.location.search);
+            const sales = params.get('sales');
+            if (sales && salesData[sales]) {
+                currentSales = sales;
+            }
+
+            // 更新联系方式显示
+            updateContactInfo();
+
+            // 加载数据
+            try {
+                const response = await fetch('products.json');
+                catalogData = await response.json();
+                renderHomePage();
+                renderSidebar();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                categoryGrid.innerHTML = '<div class="loading">数据加载失败，请刷新页面</div>';
+            }
+        }
+
+        // 更新联系方式
+        function updateContactInfo() {
+            const sales = salesData[currentSales];
+            footerContact.innerHTML = `📞 联系人：${sales.name} | <a href="tel:${sales.phone}">${sales.phone}</a>`;
+            document.getElementById('contactBtn').textContent = `📞 立即联系：${sales.name} ${sales.phone}`;
+            document.getElementById('contactBtn').href = `tel:${sales.phone}`;
+        }
+
+        // 渲染首页
+        function renderHomePage() {
+            categoryGrid.innerHTML = catalogData.categories.map(cat => {
+                const icon = getCategoryIcon(cat.name);
+                return `
+                    <div class="category-card" data-category="${cat.name}">
+                        <div class="icon">${icon}</div>
+                        <div class="name">${cat.name}</div>
+                        <div class="brand-count">${cat.brands.length} 个品牌</div>
+                    </div>
+                `;
+            }).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const category = card.dataset.category;
+                    showProductList(category);
+                });
+            });
+        }
+
+        // 渲染侧边栏
+        function renderSidebar() {
+            categoryList.innerHTML = catalogData.categories.map(cat => {
+                const count = catalogData.products.filter(p => p.category === cat.name).length;
+                return `
+                    <li class="category-item" data-category="${cat.name}">
+                        <span class="name">${cat.name}</span>
+                        <span class="count">${count}</span>
+                    </li>
+                `;
+            }).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const category = item.dataset.category;
+                    showProductList(category);
+                });
+            });
+        }
+
+        // 获取分类图标
+        function getCategoryIcon(category) {
+            const icons = {
+                '月饼': '🥮',
+                '优蟹探者': '🦀',
+                '三只松鼠': '🐿️',
+                '来伊份': '🛒',
+                '牛奶': '🥛',
+                '金龙鱼': '🫒',
+                '哈根达斯现金卡': '💳',
+                '自然派': '🍪',
+                '轩妈': '🥐',
+                '法丽兹': '🍪',
+                '榴芒一刻': '🥭',
+                '稻香村': '🥮',
+                '长发': '🥮',
+                '十全街': '🥮',
+                '荣诚-常规款': '🎁',
+                '荣诚-定制款': '🎁',
+                '锦华-常规款': '🎁',
+                '锦华-定制款': '🎁'
+            };
+            return icons[category] || '📦';
+        }
+
+        // 显示产品列表
+        function showProductList(category) {
+            currentCategory = category;
+            currentBrand = null;
+
+            // 获取该分类下的所有品牌
+            const brands = [...new Set(catalogData.products.filter(p => p.category === category).map(p => p.brand))];
+
+            // 更新视图标题
+            viewTitle.textContent = category;
+
+            // 渲染品牌筛选
+            brandFilter.innerHTML = `
+                <span class="brand-tag active" data-brand="all">全部</span>
+                ${brands.map(brand => `<span class="brand-tag" data-brand="${brand}">${brand}</span>`).join('')}
+            `;
+
+            // 绑定品牌筛选事件
+            document.querySelectorAll('.brand-tag').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    document.querySelectorAll('.brand-tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    const brand = tag.dataset.brand;
+                    if (brand === 'all') {
+                        currentBrand = null;
+                    } else {
+                        currentBrand = brand;
+                    }
+                    renderProductList();
+                });
+            });
+
+            // 渲染产品列表
+            renderProductList();
+
+            // 切换视图
+            homeView.style.display = 'none';
+            productListView.classList.add('active');
+
+            // 移动端自动隐藏侧边栏
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('hidden');
+                sidebarToggle.classList.add('show');
+            }
+        }
+
+        // 渲染产品列表
+        function renderProductList() {
+            let products = catalogData.products.filter(p => p.category === currentCategory);
+            if (currentBrand) {
+                products = products.filter(p => p.brand === currentBrand);
+            }
+
+            productGrid.innerHTML = products.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <div class="name">${product.name}</div>
+                    <div class="brand">${product.brand}</div>
+                    <div class="price-row">
+                        <span class="retail-price">¥${product.retailPrice || '—'}</span>
+                        <span class="bulk-price">¥${product.bulkPrice || '—'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const productId = parseInt(card.dataset.id);
+                    const product = catalogData.products.find(p => p.id === productId);
+                    showProductDetail(product);
+                });
+            });
+        }
+
+        // 显示产品详情
+        function showProductDetail(product) {
+            document.getElementById('modalBrand').textContent = product.brand;
+            document.getElementById('modalName').textContent = product.name;
+            document.getElementById('modalDescription').textContent = product.description || '—';
+            document.getElementById('modalSize').textContent = product.size || '—';
+            document.getElementById('modalShelf').textContent = product.shelfLife || '—';
+            document.getElementById('modalRemark').textContent = product.remark || '—';
+            document.getElementById('modalRetail').textContent = product.retailPrice ? `¥${product.retailPrice}` : '—';
+            document.getElementById('modalBulk').textContent = product.bulkPrice ? `¥${product.bulkPrice}` : '—';
+
+            modalOverlay.classList.add('active');
+        }
+
+        // 侧边栏切换
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            if (sidebar.classList.contains('hidden')) {
+                sidebarToggle.textContent = '▶';
+            } else {
+                sidebarToggle.textContent = '◀';
+            }
+        });
+
+        // 返回按钮
+        document.getElementById('backBtn').addEventListener('click', () => {
+            homeView.style.display = 'block';
+            productListView.classList.remove('active');
+
+            // 移动端恢复侧边栏
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('hidden');
+                sidebarToggle.classList.remove('show');
+            }
+        });
+
+        // 关闭弹窗
+        document.getElementById('modalClose').addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // 启动
+        init();
+    </script>
+</body>
+</html>
