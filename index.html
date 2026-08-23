@@ -891,9 +891,8 @@
         function updateContactBtn() {
             const sales = salesData[currentSales];
             const contactBtn = document.getElementById('contactBtn');
-            contactBtn.textContent = `📞 立即联系 ${sales.phone}`;
+            contactBtn.textContent = `📞 立即联系 ${sales.name} ${sales.phone}`;
             contactBtn.href = `tel:${sales.phone}`;
-            console.log('设置电话:', sales.phone, 'href:', contactBtn.href);
         }
 
         // 渲染首页
